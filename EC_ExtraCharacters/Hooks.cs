@@ -47,6 +47,9 @@ namespace EC_ExtraCharacters
         [HarmonyPrefix, HarmonyPatch(typeof(BaseSettingCharacterUI), "Start")]
         public static void BaseSettingCharacterUI_Start_ExpandUI() => Tools.ExpandUI(1);
 
+        [HarmonyPrefix, HarmonyPatch(typeof(PartSettingCanvas), "Init")]
+        public static void PartSettingCanvas_Init_ExpandUI() => Tools.ExpandUI(4);
+        
         [HarmonyPrefix, HarmonyPatch(typeof(CharaUICtrl), "Init")]
         public static void CharaUICtrl_Init_ExpandUI(CharaUICtrl __instance, ref Array ___selects)
         {
@@ -156,13 +159,13 @@ namespace EC_ExtraCharacters
             return instr;
         }
         
-        [HarmonyTranspiler, HarmonyPatch(typeof(PartSettingCanvas), "AddGroup")]
+        [HarmonyTranspiler, HarmonyPatch(typeof(PartSettingCanvas), "AddGroup", new Type[] {})]
         public static IEnumerable<CodeInstruction> PartSettingCanvas_AddGroup_ChangeCharaCount1(IEnumerable<CodeInstruction> instructions)
         {
             return ChangeCharaCount(instructions, 8, new CodeInstruction(OpCodes.Ldc_I4_S, EC_ExtraCharacters.charaCount), false, "PartSettingCanvas_AddGroup_ChangeCharaCount");
         }
         
-        [HarmonyTranspiler, HarmonyPatch(typeof(PartSettingCanvas), "AddGroup", new Type[] { typeof(HPart.Group) })]
+        [HarmonyTranspiler, HarmonyPatch(typeof(PartSettingCanvas), "AddGroup", typeof(HPart.Group))]
         public static IEnumerable<CodeInstruction> PartSettingCanvas_AddGroup_ChangeCharaCount2(IEnumerable<CodeInstruction> instructions)
         {
             return ChangeCharaCount(instructions, 8, new CodeInstruction(OpCodes.Ldc_I4_S, EC_ExtraCharacters.charaCount), false, "PartSettingCanvas_AddGroup_ChangeCharaCount");

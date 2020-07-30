@@ -10,7 +10,8 @@ namespace EC_ExtraCharacters
             "Initialize/Canvas/Init/Character",
             "BaseSetting/Canvas/Init/Character",
             "Canvas ADVPart/Manipulate/Chara",
-            "Canvas Transform"
+            "Canvas Transform",
+            "HPart/PartSetting/Canvas/GroupTree"
         };
         
         public static void ExpandUI(int id)
@@ -29,9 +30,12 @@ namespace EC_ExtraCharacters
             var ViewPort = new GameObject("ViewPort", typeof(RectTransform));
             ViewPort.transform.SetParent(ScrollView.transform, false);
             ViewPort.AddComponent<RectMask2D>();
-            ViewPort.AddComponent<Image>().color = new Color(1, 0, 0, 0.5f);
+            
             var vpRectTransform = ViewPort.GetComponent<RectTransform>();
-
+            
+            var vpImg = ViewPort.AddComponent<Image>();
+            vpImg.color = new Color(1, 0, 0, 0f);
+            
             list.SetParent(ViewPort.transform, false);
 
             svScrollRect.content = listRect;
@@ -76,6 +80,24 @@ namespace EC_ExtraCharacters
                 
                     vpRectTransform.offsetMin = new Vector2(-160, -300);
                     vpRectTransform.offsetMax = new Vector2(0, 50);
+                    break;
+                case 4:
+                    listRect.offsetMin = new Vector2(0, listRect.offsetMin.y);
+                    
+                    ScrollView.transform.localPosition = new Vector3(50, -226, 0);
+                
+                    vpRectTransform.offsetMin = new Vector2(-50, -348);
+                    vpRectTransform.offsetMax = new Vector2(297, 184);
+
+                    var btn = list.Find("Button");
+                    btn.SetParent(ScrollView.transform.parent, true);
+                    
+                    btn.transform.localPosition = new Vector3(17, -570, 0);
+                    
+                    vpImg.sprite = list.GetComponent<Image>().sprite;
+                    vpImg.type = Image.Type.Sliced;
+                    vpImg.color = Color.white;
+                    
                     break;
             }
         }
