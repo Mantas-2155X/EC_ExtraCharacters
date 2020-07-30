@@ -24,9 +24,9 @@
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
-        <DebugType>pdbonly</DebugType>
+        <DebugType>none</DebugType>
         <Optimize>true</Optimize>
-        <OutputPath>bin\Release\</OutputPath>
+        <OutputPath>../_bin/EC/BepInEx/plugins/2155X/</OutputPath>
         <DefineConstants>TRACE</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
@@ -34,18 +34,23 @@
     <ItemGroup>
         <Reference Include="0Harmony, Version=2.0.0.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\..\..\..\..\..\media\illusion\Emotion Creators\BepInEx\core\0Harmony.dll</HintPath>
+            <Private>false</Private>
         </Reference>
         <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\..\..\..\..\..\media\illusion\Emotion Creators\EmotionCreators_Data\Managed\Assembly-CSharp.dll</HintPath>
+            <Private>false</Private>
         </Reference>
         <Reference Include="BepInEx, Version=5.2.0.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\..\..\..\..\..\media\illusion\Emotion Creators\BepInEx\core\BepInEx.dll</HintPath>
+            <Private>false</Private>
         </Reference>
         <Reference Include="BepInEx.Harmony, Version=2.0.0.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\..\..\..\..\..\media\illusion\Emotion Creators\BepInEx\core\BepInEx.Harmony.dll</HintPath>
+            <Private>false</Private>
         </Reference>
         <Reference Include="IL, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\..\..\..\..\..\media\illusion\Emotion Creators\EmotionCreators_Data\Managed\IL.dll</HintPath>
+            <Private>false</Private>
         </Reference>
         <Reference Include="System" />
         <Reference Include="System.Core" />
@@ -53,18 +58,23 @@
         <Reference Include="System.Xml" />
         <Reference Include="TextMeshPro-1.0.55.56.0b12, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\..\..\..\..\..\media\illusion\Emotion Creators\EmotionCreators_Data\Managed\TextMeshPro-1.0.55.56.0b12.dll</HintPath>
+            <Private>false</Private>
         </Reference>
         <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\..\..\..\..\..\media\illusion\Emotion Creators\EmotionCreators_Data\Managed\UnityEngine.dll</HintPath>
+            <Private>false</Private>
         </Reference>
         <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\..\..\..\..\..\media\illusion\Emotion Creators\EmotionCreators_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+            <Private>false</Private>
         </Reference>
         <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\..\..\..\..\..\media\illusion\Emotion Creators\EmotionCreators_Data\Managed\UnityEngine.UI.dll</HintPath>
+            <Private>false</Private>
         </Reference>
         <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\..\..\..\..\..\media\illusion\Emotion Creators\EmotionCreators_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+            <Private>false</Private>
         </Reference>
     </ItemGroup>
     <ItemGroup>
