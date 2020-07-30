@@ -41,14 +41,36 @@ namespace EC_ExtraCharacters
             }
         }
 
+        [HarmonyPostfix, HarmonyPatch(typeof(HPart), ".ctor")]
+        public static void HPart_ctor_ChangeCoordCount1(HPart __instance)
+        {
+            EC_ExtraCharacters.Logger.LogMessage("aya1");
+            
+            __instance.coordinateInfos = new HPart.CoordinateInfo[EC_ExtraCharacters.charaCount];
+            
+            for (var i = 0; i < __instance.coordinateInfos.Length; i++)
+                __instance.coordinateInfos[i] = new HPart.CoordinateInfo();
+        }
+
+        [HarmonyPostfix, HarmonyPatch(typeof(HPart), ".ctor", new [] { typeof(HPart) })]
+        public static void HPart_ctor_ChangeCoordCount2(HPart __instance, HPart _part)
+        {
+            EC_ExtraCharacters.Logger.LogMessage("aya2");
+            
+            __instance.coordinateInfos = new HPart.CoordinateInfo[EC_ExtraCharacters.charaCount];
+            
+            for (var i = 0; i < __instance.coordinateInfos.Length; i++)
+                __instance.coordinateInfos[i] = new HPart.CoordinateInfo(_part.coordinateInfos[i]);
+        }
+
         [HarmonyPrefix, HarmonyPatch(typeof(InitializeCanvas), "Start")]
         public static void InitializeCanvas_Start_ExpandUI() => Tools.ExpandUI(0);
         
         [HarmonyPrefix, HarmonyPatch(typeof(BaseSettingCharacterUI), "Start")]
         public static void BaseSettingCharacterUI_Start_ExpandUI() => Tools.ExpandUI(1);
 
-        [HarmonyPrefix, HarmonyPatch(typeof(PartSettingCanvas), "Init")]
-        public static void PartSettingCanvas_Init_ExpandUI() => Tools.ExpandUI(4);
+        [HarmonyPrefix, HarmonyPatch(typeof(PartSettingCanvas), "Start")]
+        public static void PartSettingCanvas_Start_ExpandUI() => Tools.ExpandUI(4);
         
         [HarmonyPrefix, HarmonyPatch(typeof(CharaUICtrl), "Init")]
         public static void CharaUICtrl_Init_ExpandUI(CharaUICtrl __instance, ref Array ___selects)
@@ -152,6 +174,7 @@ namespace EC_ExtraCharacters
         public static IEnumerable<CodeInstruction> HEditData_Check_ChangeCharaCount(IEnumerable<CodeInstruction> instructions)
         {
             var instr = instructions.ToList();
+            
             ChangeCharaCount(instr, 7, new CodeInstruction(OpCodes.Ldc_I4_S, EC_ExtraCharacters.charaCount - 1), false, "HEditData_Check_ChangeCharaCount");
             ChangeCharaCount(instr, 8, new CodeInstruction(OpCodes.Ldc_I4_S, EC_ExtraCharacters.charaCount), false, "HEditData_Check_ChangeCharaCount");
             ChangeCharaCount(instr, 8, new CodeInstruction(OpCodes.Ldc_I4_S, EC_ExtraCharacters.charaCount), true, "HEditData_Check_ChangeCharaCount");
@@ -159,26 +182,17 @@ namespace EC_ExtraCharacters
             return instr;
         }
         
+        [HarmonyTranspiler, HarmonyPatch(typeof(HPart), ".ctor", typeof(HPart))]
+        public static IEnumerable<CodeInstruction> HPart_ctor_ChangeCoordCount(IEnumerable<CodeInstruction> instructions) => ChangeCharaCount(instructions, 8, new CodeInstruction(OpCodes.Ldc_I4_S, EC_ExtraCharacters.charaCount), false, "HPart_ctor_ChangeCoordCount");
+
         [HarmonyTranspiler, HarmonyPatch(typeof(PartSettingCanvas), "AddGroup", new Type[] {})]
-        public static IEnumerable<CodeInstruction> PartSettingCanvas_AddGroup_ChangeCharaCount1(IEnumerable<CodeInstruction> instructions)
-        {
-            return ChangeCharaCount(instructions, 8, new CodeInstruction(OpCodes.Ldc_I4_S, EC_ExtraCharacters.charaCount), false, "PartSettingCanvas_AddGroup_ChangeCharaCount");
-        }
+        public static IEnumerable<CodeInstruction> PartSettingCanvas_AddGroup_ChangeCharaCount1(IEnumerable<CodeInstruction> instructions) => ChangeCharaCount(instructions, 8, new CodeInstruction(OpCodes.Ldc_I4_S, EC_ExtraCharacters.charaCount), false, "PartSettingCanvas_AddGroup_ChangeCharaCount1");
         
         [HarmonyTranspiler, HarmonyPatch(typeof(PartSettingCanvas), "AddGroup", typeof(HPart.Group))]
-        public static IEnumerable<CodeInstruction> PartSettingCanvas_AddGroup_ChangeCharaCount2(IEnumerable<CodeInstruction> instructions)
-        {
-            return ChangeCharaCount(instructions, 8, new CodeInstruction(OpCodes.Ldc_I4_S, EC_ExtraCharacters.charaCount), false, "PartSettingCanvas_AddGroup_ChangeCharaCount");
-        }
+        public static IEnumerable<CodeInstruction> PartSettingCanvas_AddGroup_ChangeCharaCount2(IEnumerable<CodeInstruction> instructions) => ChangeCharaCount(instructions, 8, new CodeInstruction(OpCodes.Ldc_I4_S, EC_ExtraCharacters.charaCount), false, "PartSettingCanvas_AddGroup_ChangeCharaCount2");
+            
+        public static IEnumerable<CodeInstruction> InitializeCanvas_AddChara_ChangeCharaCount1(IEnumerable<CodeInstruction> instructions) => ChangeCharaCount(instructions, 8, new CodeInstruction(OpCodes.Ldc_I4_S, EC_ExtraCharacters.charaCount), false, "InitializeCanvas_AddChara_ChangeCharaCount1");
         
-        public static IEnumerable<CodeInstruction> InitializeCanvas_AddChara_ChangeCharaCount1(IEnumerable<CodeInstruction> instructions)
-        {
-            return ChangeCharaCount(instructions, 8, new CodeInstruction(OpCodes.Ldc_I4_S, EC_ExtraCharacters.charaCount), false, "InitializeCanvas_AddChara_ChangeCount");
-        }
-        
-        public static IEnumerable<CodeInstruction> InitializeCanvas_AddChara_ChangeCharaCount2(IEnumerable<CodeInstruction> instructions)
-        {
-            return ChangeCharaCount(instructions, 7, new CodeInstruction(OpCodes.Ldc_I4_S, EC_ExtraCharacters.charaCount - 1), false, "InitializeCanvas_AddChara_ChangeCount");
-        }
+        public static IEnumerable<CodeInstruction> InitializeCanvas_AddChara_ChangeCharaCount2(IEnumerable<CodeInstruction> instructions) => ChangeCharaCount(instructions, 7, new CodeInstruction(OpCodes.Ldc_I4_S, EC_ExtraCharacters.charaCount - 1), false, "InitializeCanvas_AddChara_ChangeCharaCount2");
     }
 }

@@ -22,7 +22,7 @@ namespace EC_ExtraCharacters
         {
             Logger = base.Logger;
             
-            CharaCount = Config.Bind("Requires restart! Modifies save!", "Character Count", 8, new ConfigDescription("Requires a restart to apply.", new AcceptableValueRange<int>(8, 99)));
+            CharaCount = Config.Bind("Requires restart!", "Character Count", 99, new ConfigDescription("Changing the value may cause more incompatibilities.", new AcceptableValueRange<int>(8, 99)));
             charaCount = CharaCount.Value;
 
             var harmony = new Harmony(nameof(EC_ExtraCharacters));
