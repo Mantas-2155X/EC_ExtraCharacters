@@ -72,6 +72,85 @@ namespace EC_ExtraCharacters
         [HarmonyPrefix, HarmonyPatch(typeof(PartSettingCanvas), "Start")]
         public static void PartSettingCanvas_Start_ExpandUI() => Tools.ExpandUI(4);
         
+        [HarmonyPrefix, HarmonyPatch(typeof(MotionCopyUI), "Start")]
+        public static void MotionCopyUI_Start_ExpandUI()
+        {
+            Tools.ExpandUI(5);
+            Tools.ExpandUI(6);
+        }
+
+        [HarmonyPrefix, HarmonyPatch(typeof(PartInfoClothSetUI), "Start")]
+        public static void PartInfoClothSetUI_Start_ExpandUI(ref PartInfoClothSetUI.CoordinateUIInfo[] ___coordinateUIs)
+        {
+            var newSelects = new PartInfoClothSetUI.CoordinateUIInfo[EC_ExtraCharacters.charaCount];
+            Array.Copy(___coordinateUIs, newSelects, Math.Min(___coordinateUIs.Length, newSelects.Length));
+
+            var UI = GameObject.Find("UI");
+            var orig = UI.transform.Find("HPart/PartInfoSetting/Canvas/ClothSetCategory/BG/SetList/Scroll View/Viewport/Content/Set (1)");
+
+            for (var i = ___coordinateUIs.Length; i < EC_ExtraCharacters.charaCount; i++)
+            {
+                var gCopy = UnityEngine.Object.Instantiate(orig, orig.parent);
+                gCopy.name = $"Set ({i})";
+
+                var comp = new PartInfoClothSetUI.CoordinateUIInfo
+                {
+                    objRoot = gCopy.gameObject,
+                    txtCharaName = gCopy.Find("imgTitle/Mask/Name").GetComponent<Text>(),
+                    txtCoordinateName = gCopy.Find("Coordinate/Image/Mask/Text").GetComponent<Text>(),
+                    btnContinuation = gCopy.Find("Coordinate/btnContinuation").GetComponent<Button>(),
+                    btnEntry = gCopy.Find("Coordinate/btnChange").GetComponent<Button>(),
+                    btnRelease = gCopy.Find("Coordinate/btnReset").GetComponent<Button>(),
+                };
+
+                newSelects[i] = comp;
+            }
+
+            ___coordinateUIs = newSelects;
+        }
+        
+        [HarmonyPrefix, HarmonyPatch(typeof(GroupCharaSelect), "InitUI")]
+        public static void GroupCharaSelect_InitUI_ExpandUI(ref GroupCharaSelect.ToggleText[] ___ttCharas)
+        {
+            var newSelects = new GroupCharaSelect.ToggleText[EC_ExtraCharacters.charaCount];
+            Array.Copy(___ttCharas, newSelects, Math.Min(___ttCharas.Length, newSelects.Length));
+
+            var UI = GameObject.Find("UI");
+            var orig = UI.transform.Find("HPart/MotionSetting/Canvas/chara/CharaInfo1");
+
+            for (var i = ___ttCharas.Length; i < EC_ExtraCharacters.charaCount; i++)
+            {
+                var gCopy = UnityEngine.Object.Instantiate(orig, orig.parent);
+                gCopy.name = "CharaInfo" + i;
+
+                var comp = new GroupCharaSelect.ToggleText
+                {
+                    tgl = gCopy.GetComponentInChildren<Toggle>(),
+                    text = gCopy.Find("tglGroupChara/mask/Label").GetComponent<Text>(),
+                    objRoot = gCopy.gameObject,
+                    objState = gCopy.Find("Status").gameObject,
+                    status =
+                    {
+                        btnHalf = gCopy.Find("Status/Cloth/State/btnHalf").GetComponent<Button>(),
+                        btnNude = gCopy.Find("Status/Cloth/State/btnNude").GetComponent<Button>(),
+                        btnWear = gCopy.Find("Status/Cloth/State/btnWear").GetComponent<Button>(),
+                        btnOff = gCopy.Find("Status/Accessory/State/btnOff").GetComponent<Button>(),
+                        btnOn = gCopy.Find("Status/Accessory/State/btnOn").GetComponent<Button>(),
+                        btnSiruOff = gCopy.Find("Status/Siru/btnSiru").GetComponent<Button>(),
+                        tglDraw = gCopy.Find("Status/BodyDraw/tglDraw").GetComponent<Toggle>(),
+                        tglGuideDraw = gCopy.Find("Status/GuideDraw/tglDraw").GetComponent<Toggle>()
+                    }
+                };
+
+
+                newSelects[i] = comp;
+            }
+
+            ___ttCharas = newSelects;
+            
+            Tools.ExpandUI(7);
+        }
+        
         [HarmonyPrefix, HarmonyPatch(typeof(CharaUICtrl), "Init")]
         public static void CharaUICtrl_Init_ExpandUI(CharaUICtrl __instance, ref Array ___selects)
         {

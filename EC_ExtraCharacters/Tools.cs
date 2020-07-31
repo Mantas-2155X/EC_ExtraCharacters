@@ -1,3 +1,5 @@
+using System.Linq;
+
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +13,10 @@ namespace EC_ExtraCharacters
             "BaseSetting/Canvas/Init/Character",
             "Canvas ADVPart/Manipulate/Chara",
             "Canvas Transform",
-            "HPart/PartSetting/Canvas/GroupTree"
+            "HPart/PartSetting/Canvas/GroupTree",
+            "HPart/MotionSetting/Canvas/CopyCategory/BG/Position/WhoWhere/Src/SrcChara/List/Scroll View",
+            "HPart/MotionSetting/Canvas/CopyCategory/BG/Position/WhoWhere/Dst/DstChara/List/Scroll View",
+            "HPart/MotionSetting/Canvas/chara"
         };
         
         public static void ExpandUI(int id)
@@ -19,7 +24,40 @@ namespace EC_ExtraCharacters
             var UI = GameObject.Find(id == 2 || id == 3 ? "ADVPart" : "UI");
             
             var character = UI.transform.Find(tr[id]);
-            var list = character.transform.Find(id == 2 || id == 3 ? "Chara Select" : "List");
+
+            if (id == 5 || id == 6)
+            {
+                var sRect = character.gameObject.AddComponent<ScrollRect>();
+                sRect.content = character.Find("Viewport/Content").GetComponent<RectTransform>();
+                sRect.viewport = character.Find("Viewport").GetComponent<RectTransform>();
+                sRect.horizontal = false;
+                sRect.scrollSensitivity = 40;
+
+                var fit = sRect.content.gameObject.AddComponent<ContentSizeFitter>();
+                fit.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+                fit.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+                
+                return;
+            }
+
+            Transform list;
+            if (id == 7)
+            {
+                var listObj = new GameObject("List", typeof(RectTransform));
+                listObj.transform.SetParent(character, false);
+                
+                list = listObj.transform;
+
+                var temp = character.Cast<Transform>().Where(child => child.name.Contains("CharaInfo")).ToList();
+
+                foreach (var t in temp)
+                    t.SetParent(list.transform, false);
+            }
+            else
+            {
+                list = character.transform.Find(id == 2 || id == 3 ? "Chara Select" : "List");
+            }
+
             var listRect = list.gameObject.GetComponent<RectTransform>();
             
             var ScrollView = new GameObject("ScrollView", typeof(RectTransform));
@@ -34,7 +72,7 @@ namespace EC_ExtraCharacters
             var vpRectTransform = ViewPort.GetComponent<RectTransform>();
             
             var vpImg = ViewPort.AddComponent<Image>();
-            vpImg.color = new Color(1, 0, 0, 0f);
+            vpImg.color = new Color(1, 0, 0, 0.5f);
             
             list.SetParent(ViewPort.transform, false);
 
@@ -97,6 +135,15 @@ namespace EC_ExtraCharacters
                     vpImg.sprite = list.GetComponent<Image>().sprite;
                     vpImg.type = Image.Type.Sliced;
                     vpImg.color = Color.white;
+                    
+                    break;
+                case 7:
+                    ScrollView.AddComponent<LayoutElement>().preferredHeight = 300;
+                    ScrollView.transform.SetSiblingIndex(2);
+                    
+                    //listRect.offsetMin = new Vector2(-109, listRect.offsetMin.y);
+                    
+                    //ScrollView.transform.localPosition = new Vector3(-210, -137, 0);
                     
                     break;
             }
