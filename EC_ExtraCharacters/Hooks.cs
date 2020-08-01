@@ -78,6 +78,24 @@ namespace EC_ExtraCharacters
             Tools.ExpandUI(5);
             Tools.ExpandUI(6);
         }
+        
+        [HarmonyPostfix, HarmonyPatch(typeof(EditUICtrl), "Active")]
+        public static void EditUICtrl_Active_ExpandUI(EditUICtrl.Mode _mode)
+        {
+            if (_mode != EditUICtrl.Mode.CharaTransform) 
+                return;
+            
+            var UI = GameObject.Find("ADVPart");
+            var ScrollView = UI.transform.Find("Canvas Transform/ScrollView");
+
+            if (ScrollView == null)
+                return;
+            
+            var position1 = UI.transform.Find("Canvas ADVPart/Manipulate/Item/State").position;
+            position1 += new Vector3(-10, 0, 0);
+                    
+            ScrollView.transform.position = position1;
+        }
 
         [HarmonyPrefix, HarmonyPatch(typeof(PartInfoClothSetUI), "Start")]
         public static void PartInfoClothSetUI_Start_ExpandUI(ref PartInfoClothSetUI.CoordinateUIInfo[] ___coordinateUIs)

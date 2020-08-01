@@ -49,9 +49,13 @@ namespace EC_ExtraCharacters
                 list = listObj.transform;
 
                 var temp = character.Cast<Transform>().Where(child => child.name.Contains("CharaInfo")).ToList();
-
                 foreach (var t in temp)
+                {
                     t.SetParent(list.transform, false);
+                    
+                    if(t.name == "CharaInfo7")
+                        t.GetComponent<VerticalLayoutGroup>().padding = new RectOffset(8, 0, 0, 0);
+                }
             }
             else
             {
@@ -72,7 +76,7 @@ namespace EC_ExtraCharacters
             var vpRectTransform = ViewPort.GetComponent<RectTransform>();
             
             var vpImg = ViewPort.AddComponent<Image>();
-            vpImg.color = new Color(1, 0, 0, 0.5f);
+            vpImg.color = new Color(1, 0, 0, 0f);
             
             list.SetParent(ViewPort.transform, false);
 
@@ -106,18 +110,28 @@ namespace EC_ExtraCharacters
                 case 2:
                     listRect.offsetMin = new Vector2(0, listRect.offsetMin.y);
                     
-                    ScrollView.transform.localPosition = new Vector3(-620f, 490, 0);
-                
-                    vpRectTransform.offsetMin = new Vector2(-160, -300);
-                    vpRectTransform.offsetMax = new Vector2(0, 50);
+                    vpRectTransform.offsetMin = new Vector2(-160, -335);
+                    vpRectTransform.offsetMax = new Vector2(0, 0);
+
+                    Vector3 position;
+                    
+                    position = UI.transform.Find("Canvas ADVPart/Manipulate/Item/State").position;
+                    position += new Vector3(-10, 0, 0);
+                    
+                    ScrollView.transform.position = position;
                     break;
                 case 3:
                     listRect.offsetMin = new Vector2(0, listRect.offsetMin.y);
                     
-                    ScrollView.transform.localPosition = new Vector3(-795f, 490, 0);
-                
-                    vpRectTransform.offsetMin = new Vector2(-160, -300);
-                    vpRectTransform.offsetMax = new Vector2(0, 50);
+                    vpRectTransform.offsetMin = new Vector2(-160, -335);
+                    vpRectTransform.offsetMax = new Vector2(0, 0);
+
+                    Vector3 position1;
+                    
+                    position1 = UI.transform.Find("Canvas ADVPart/Manipulate/Item/State").position;
+                    position1 += new Vector3(-10, 0, 0);
+                    
+                    ScrollView.transform.position = position1;
                     break;
                 case 4:
                     listRect.offsetMin = new Vector2(0, listRect.offsetMin.y);
@@ -140,11 +154,14 @@ namespace EC_ExtraCharacters
                 case 7:
                     ScrollView.AddComponent<LayoutElement>().preferredHeight = 300;
                     ScrollView.transform.SetSiblingIndex(2);
+
+                    list.gameObject.AddComponent<VerticalLayoutGroup>();
+    
+                    vpRectTransform.offsetMin = new Vector2(-42, -150);
+                    vpRectTransform.offsetMax = new Vector2(158, 150);
                     
-                    //listRect.offsetMin = new Vector2(-109, listRect.offsetMin.y);
-                    
-                    //ScrollView.transform.localPosition = new Vector3(-210, -137, 0);
-                    
+                    listRect.offsetMin = new Vector2(-108, listRect.offsetMin.y);
+
                     break;
             }
         }
