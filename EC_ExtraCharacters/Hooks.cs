@@ -7,7 +7,7 @@ using HEdit;
 using ADVPart.Manipulate;
 
 using HarmonyLib;
-
+using HPlay;
 using TMPro;
 
 using UnityEngine;
@@ -44,8 +44,6 @@ namespace EC_ExtraCharacters
         [HarmonyPostfix, HarmonyPatch(typeof(HPart), ".ctor")]
         public static void HPart_ctor_ChangeCoordCount1(HPart __instance)
         {
-            EC_ExtraCharacters.Logger.LogMessage("aya1");
-            
             __instance.coordinateInfos = new HPart.CoordinateInfo[EC_ExtraCharacters.charaCount];
             
             for (var i = 0; i < __instance.coordinateInfos.Length; i++)
@@ -55,8 +53,6 @@ namespace EC_ExtraCharacters
         [HarmonyPostfix, HarmonyPatch(typeof(HPart), ".ctor", new [] { typeof(HPart) })]
         public static void HPart_ctor_ChangeCoordCount2(HPart __instance, HPart _part)
         {
-            EC_ExtraCharacters.Logger.LogMessage("aya2");
-            
             __instance.coordinateInfos = new HPart.CoordinateInfo[EC_ExtraCharacters.charaCount];
             
             for (var i = 0; i < __instance.coordinateInfos.Length; i++)
@@ -78,9 +74,66 @@ namespace EC_ExtraCharacters
             Tools.ExpandUI(5);
             Tools.ExpandUI(6);
         }
+
+        [HarmonyPrefix, HarmonyPatch(typeof(HPlayData), "Start")]
+        public static void HPlayData_Start_ChangeCount(HPlayData __instance)
+        {
+            __instance.characterChangeInfos = new HPlayData.CharacterChangeInfo[EC_ExtraCharacters.charaCount];
+            __instance.groupInfos = new HPlayData.GroupInfo[EC_ExtraCharacters.charaCount];
+            __instance.playCharaInfos = new HPlayData.PlayCharaInfo[EC_ExtraCharacters.charaCount];
+        }
+        
+        [HarmonyPrefix, HarmonyPatch(typeof(HPlayScene), "Start")]
+        public static void HPlayScene_Start_ChangeCount(ref AnimationParameterCtrl[] ___parametersCtrls)
+        {
+            var newparams = new AnimationParameterCtrl[EC_ExtraCharacters.charaCount];
+            
+            Array.Copy(___parametersCtrls, newparams, Math.Min(___parametersCtrls.Length, newparams.Length));
+
+            var trav1 = Traverse.Create(newparams[0]);
+            
+            for (var i = ___parametersCtrls.Length; i < EC_ExtraCharacters.charaCount; i++)
+            {
+                var param = new AnimationParameterCtrl();
+                
+                var trav = Traverse.Create(param);
+                trav.Field("motions").SetValue(trav1.Field("motions").GetValue<float[]>());
+                trav.Field("fluctuations").SetValue(trav1.Field("fluctuations").GetValue<Fluctuation[]>());
+                
+                newparams[i] = param;
+            }
+
+            ___parametersCtrls = newparams;
+        }
+        
+        [HarmonyPrefix, HarmonyPatch(typeof(HPlaySECtrl), "Start")]
+        public static void HPlaySECtrl_Start_ChangeCount(ref Array ___oldGroupInfos)
+        {
+            var type = ___oldGroupInfos.GetType().GetElementType();
+            if (type == null) 
+                return;
+            
+            var newSelects = Array.CreateInstance(type, EC_ExtraCharacters.charaCount);
+
+            ___oldGroupInfos = newSelects;
+        }
+        
+        [HarmonyPrefix, HarmonyPatch(typeof(HPlayVoiceCtr), "Start")]
+        public static void HPlayVoiceCtr_Start_ChangeCount(ref Motion.Face[] ___playFaces, ref Array ___oldGroupInfos)
+        {
+            ___playFaces = new Motion.Face[EC_ExtraCharacters.charaCount];
+            
+            var type = ___oldGroupInfos.GetType().GetElementType();
+            if (type == null) 
+                return;
+            
+            var newSelects = Array.CreateInstance(type, EC_ExtraCharacters.charaCount);
+
+            ___oldGroupInfos = newSelects;
+        }
         
         [HarmonyPostfix, HarmonyPatch(typeof(EditUICtrl), "Active")]
-        public static void EditUICtrl_Active_ExpandUI(EditUICtrl.Mode _mode)
+        public static void EditUICtrl_Active_FixPos(EditUICtrl.Mode _mode)
         {
             if (_mode != EditUICtrl.Mode.CharaTransform) 
                 return;
@@ -159,7 +212,6 @@ namespace EC_ExtraCharacters
                         tglGuideDraw = gCopy.Find("Status/GuideDraw/tglDraw").GetComponent<Toggle>()
                     }
                 };
-
 
                 newSelects[i] = comp;
             }
