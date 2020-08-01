@@ -4,9 +4,13 @@ This plugin allows you to have more than the default 8 characters.
 
 # DO NOT REUPLOAD WITHOUT PERMISSION | 未经许可请勿转载
 
-**Warning:**
-* **Scenes/saves using this plugin will not work without the plugin.**
-* **Keep the character count in plugin settings at 99 to avoid incompatibilities.**
+**Warning:**  
+* **Scenes/saves using this plugin will not work without the plugin.**  
+* **Keep the character count in plugin settings at 99 to avoid incompatibilities.**  
+
+**Features:**  
+* Allow more characters in Main Menu, ADV nodes/scenes, H nodes/scenes.  
+* Unlock, extend and add scrolling function to all UIs where characters are picked
 
 **Download:**  
 * Get the latest release for your game from https://github.com/Mantas-2155X/EC_ExtraCharacters/releases  
