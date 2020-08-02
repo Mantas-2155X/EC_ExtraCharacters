@@ -78,6 +78,9 @@ namespace EC_ExtraCharacters
         [HarmonyPrefix, HarmonyPatch(typeof(HPlayCharacterChange), "Start")]
         public static void HPlayCharacterChange_Start_ExpandUI() => Tools.ExpandUI(8);
         
+        [HarmonyPrefix, HarmonyPatch(typeof(HPlayHPartMainMenuUI), "Start")]
+        public static void HPlayHPartMainMenuUI_Start_ExpandUI() => Tools.ExpandUI(9);
+        
         [HarmonyPrefix, HarmonyPatch(typeof(HPlayData), "Start")]
         public static void HPlayData_Start_ChangeCount(HPlayData __instance)
         {

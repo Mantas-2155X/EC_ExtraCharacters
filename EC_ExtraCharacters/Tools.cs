@@ -17,7 +17,8 @@ namespace EC_ExtraCharacters
             "HPart/MotionSetting/Canvas/CopyCategory/BG/Position/WhoWhere/Src/SrcChara/List/Scroll View",
             "HPart/MotionSetting/Canvas/CopyCategory/BG/Position/WhoWhere/Dst/DstChara/List/Scroll View",
             "HPart/MotionSetting/Canvas/chara",
-            "Canvas/Panel/Select"
+            "Canvas/Panel/Select",
+            "System/Canvas/System"
         };
         
         public static void ExpandUI(int id)
@@ -60,7 +61,7 @@ namespace EC_ExtraCharacters
             }
             else
             {
-                list = character.transform.Find(id == 2 || id == 3 ? "Chara Select" : "List");
+                list = character.transform.Find(id == 2 || id == 3 ? "Chara Select" : id == 9 ? "Member" : "List");
             }
 
             var listRect = list.gameObject.GetComponent<RectTransform>();
@@ -169,6 +170,14 @@ namespace EC_ExtraCharacters
                     
                     vpRectTransform.offsetMin = new Vector2(-570, -372);
                     vpRectTransform.offsetMax = new Vector2(570, 452);
+                    break;
+                case 9:
+                    listRect.offsetMin = new Vector2(0, listRect.offsetMin.y);
+                    
+                    ScrollView.transform.localPosition = new Vector3(70, -210, 0);
+
+                    vpRectTransform.offsetMin = new Vector2(-70, -128);
+                    vpRectTransform.offsetMax = new Vector2(55, 128);
                     break;
             }
         }
