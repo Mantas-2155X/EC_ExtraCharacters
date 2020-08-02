@@ -16,12 +16,13 @@ namespace EC_ExtraCharacters
             "HPart/PartSetting/Canvas/GroupTree",
             "HPart/MotionSetting/Canvas/CopyCategory/BG/Position/WhoWhere/Src/SrcChara/List/Scroll View",
             "HPart/MotionSetting/Canvas/CopyCategory/BG/Position/WhoWhere/Dst/DstChara/List/Scroll View",
-            "HPart/MotionSetting/Canvas/chara"
+            "HPart/MotionSetting/Canvas/chara",
+            "Canvas/Panel/Select"
         };
         
         public static void ExpandUI(int id)
         {
-            var UI = GameObject.Find(id == 2 || id == 3 ? "ADVPart" : "UI");
+            var UI = GameObject.Find(id == 2 || id == 3 ? "ADVPart" : id == 8 ? "HPlayCharacterChange" : "UI");
             
             var character = UI.transform.Find(tr[id]);
 
@@ -162,6 +163,12 @@ namespace EC_ExtraCharacters
                     
                     listRect.offsetMin = new Vector2(-108, listRect.offsetMin.y);
 
+                    break;
+                case 8:
+                    listRect.offsetMin = new Vector2(0, listRect.offsetMin.y);
+                    
+                    vpRectTransform.offsetMin = new Vector2(-570, -372);
+                    vpRectTransform.offsetMax = new Vector2(570, 452);
                     break;
             }
         }
