@@ -78,9 +78,33 @@ namespace EC_ExtraCharacters
         [HarmonyPrefix, HarmonyPatch(typeof(HPlayCharacterChange), "Start")]
         public static void HPlayCharacterChange_Start_ExpandUI() => Tools.ExpandUI(8);
         
-        [HarmonyPrefix, HarmonyPatch(typeof(HPlayHPartMainMenuUI), "Start")]
-        public static void HPlayHPartMainMenuUI_Start_ExpandUI() => Tools.ExpandUI(9);
-        
+        [HarmonyPrefix, HarmonyPatch(typeof(HPlayHPartMemberUI), "Start")]
+        public static void HPlayHPartMemberUI_Start_ExpandUI(ref HPlayHPartUI.SelectUIText[] ___memberUIs)
+        {
+            Tools.ExpandUI(9);
+            
+            var newSelects = new HPlayHPartUI.SelectUIText[EC_ExtraCharacters.charaCount];
+            Array.Copy(___memberUIs, newSelects, Math.Min(___memberUIs.Length, newSelects.Length));
+
+            var orig = ___memberUIs[1].btn.transform;
+
+            for (var i = ___memberUIs.Length; i < EC_ExtraCharacters.charaCount; i++)
+            {
+                var gCopy = UnityEngine.Object.Instantiate(orig, orig.parent);
+                gCopy.name = "btnName" + i;
+
+                var comp = new HPlayHPartUI.SelectUIText
+                {
+                    text = gCopy.GetComponentInChildren<Text>(),
+                    btn = gCopy.GetComponent<Button>()
+                };
+
+                newSelects[i] = comp;
+            }
+
+            ___memberUIs = newSelects;
+        }
+
         [HarmonyPrefix, HarmonyPatch(typeof(HPlayData), "Start")]
         public static void HPlayData_Start_ChangeCount(HPlayData __instance)
         {
