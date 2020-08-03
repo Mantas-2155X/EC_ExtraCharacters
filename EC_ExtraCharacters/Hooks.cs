@@ -78,6 +78,9 @@ namespace EC_ExtraCharacters
         [HarmonyPrefix, HarmonyPatch(typeof(HPlayCharacterChange), "Start")]
         public static void HPlayCharacterChange_Start_ExpandUI() => Tools.ExpandUI(8);
         
+        [HarmonyPrefix, HarmonyPatch(typeof(MotionIKParentUI), "Start")]
+        public static void MotionIKParentUI_Start_ExpandUI() => Tools.ExpandUI(10);
+        
         [HarmonyPrefix, HarmonyPatch(typeof(HPlayHPartMemberUI), "Start")]
         public static void HPlayHPartMemberUI_Start_ExpandUI(ref HPlayHPartUI.SelectUIText[] ___memberUIs)
         {
@@ -208,6 +211,37 @@ namespace EC_ExtraCharacters
             }
 
             ___coordinateUIs = newSelects;
+        }
+        
+        [HarmonyPrefix, HarmonyPatch(typeof(IKParentSettingCanvas), "Start")]
+        public static void IKParentSettingCanvas_Start_ExpandUI(ref IKParentSettingCanvas.ToggleText[] ___ttCharas)
+        {
+            var newSelects = new IKParentSettingCanvas.ToggleText[EC_ExtraCharacters.charaCount];
+            Array.Copy(___ttCharas, newSelects, Math.Min(___ttCharas.Length, newSelects.Length));
+
+            var UI = GameObject.Find("UI");
+            var orig = UI.transform.Find("HPart/IKParentSetting/Canvas/chara/CharaInfo1");
+
+            for (var i = ___ttCharas.Length; i < EC_ExtraCharacters.charaCount; i++)
+            {
+                var gCopy = UnityEngine.Object.Instantiate(orig, orig.parent);
+                gCopy.name = "CharaInfo" + i;
+
+                var comp = new IKParentSettingCanvas.ToggleText
+                {
+                    tgl = gCopy.Find("tglGroupChara").GetComponent<Toggle>(),
+                    text = gCopy.Find("tglGroupChara/mask/Label").GetComponent<Text>(),
+                    objRoot = gCopy.gameObject,
+                    objState = gCopy.Find("Status").gameObject,
+                    tglGuideDraw = gCopy.Find("Status/GuideDraw/tglDraw").GetComponentInChildren<Toggle>(),
+                };
+
+                newSelects[i] = comp;
+            }
+
+            ___ttCharas = newSelects;
+            
+            Tools.ExpandUI(11);
         }
         
         [HarmonyPrefix, HarmonyPatch(typeof(GroupCharaSelect), "InitUI")]

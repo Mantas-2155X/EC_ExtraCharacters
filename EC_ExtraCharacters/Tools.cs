@@ -18,7 +18,9 @@ namespace EC_ExtraCharacters
             "HPart/MotionSetting/Canvas/CopyCategory/BG/Position/WhoWhere/Dst/DstChara/List/Scroll View",
             "HPart/MotionSetting/Canvas/chara",
             "Canvas/Panel/Select",
-            "System/Canvas/System"
+            "System/Canvas/System",
+            "HPart/CanvasIKParentSelect/BG/Frame/imgParent",
+            "HPart/IKParentSetting/Canvas/chara"
         };
         
         public static void ExpandUI(int id)
@@ -43,7 +45,7 @@ namespace EC_ExtraCharacters
             }
 
             Transform list;
-            if (id == 7)
+            if (id == 7 || id == 11)
             {
                 var listObj = new GameObject("List", typeof(RectTransform));
                 listObj.transform.SetParent(character, false);
@@ -178,6 +180,22 @@ namespace EC_ExtraCharacters
 
                     vpRectTransform.offsetMin = new Vector2(-70, -128);
                     vpRectTransform.offsetMax = new Vector2(55, 128);
+                    break;
+                case 10:
+                    vpRectTransform.offsetMin = new Vector2(-315, -105);
+                    vpRectTransform.offsetMax = new Vector2(315, 68);
+                    break;
+                case 11:
+                    ScrollView.AddComponent<LayoutElement>().preferredHeight = 300;
+                    ScrollView.transform.SetSiblingIndex(2);
+
+                    list.gameObject.AddComponent<VerticalLayoutGroup>();
+    
+                    vpRectTransform.offsetMin = new Vector2(-42, -150);
+                    vpRectTransform.offsetMax = new Vector2(158, 150);
+                    
+                    listRect.offsetMin = new Vector2(-108, listRect.offsetMin.y);
+
                     break;
             }
         }
