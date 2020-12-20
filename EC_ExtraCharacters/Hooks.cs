@@ -395,6 +395,9 @@ namespace EC_ExtraCharacters
             return instr;
         }
         
+        [HarmonyTranspiler, HarmonyPatch(typeof(ParticleCollision), "Start")]
+        public static IEnumerable<CodeInstruction> ParticleCollision_Start_ChangeSiruCount(IEnumerable<CodeInstruction> instructions) => ChangeCharaCount(instructions, 8, new CodeInstruction(OpCodes.Ldc_I4_S, EC_ExtraCharacters.charaCount), false, "ParticleCollision_Start_ChangeSiruCount");
+
         [HarmonyTranspiler, HarmonyPatch(typeof(HPart), ".ctor", typeof(HPart))]
         public static IEnumerable<CodeInstruction> HPart_ctor_ChangeCoordCount(IEnumerable<CodeInstruction> instructions) => ChangeCharaCount(instructions, 8, new CodeInstruction(OpCodes.Ldc_I4_S, EC_ExtraCharacters.charaCount), false, "HPart_ctor_ChangeCoordCount");
 
