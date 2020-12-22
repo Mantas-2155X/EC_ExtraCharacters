@@ -10,7 +10,7 @@ namespace EC_ExtraCharacters
     [BepInPlugin(nameof(EC_ExtraCharacters), nameof(EC_ExtraCharacters), VERSION)]
     public class EC_ExtraCharacters : BaseUnityPlugin
     {
-        public const string VERSION = "1.0.2";
+        public const string VERSION = "1.0.3";
 
         public new static ManualLogSource Logger;
         
