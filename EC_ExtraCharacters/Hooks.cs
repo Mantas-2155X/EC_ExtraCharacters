@@ -41,7 +41,7 @@ namespace EC_ExtraCharacters
             }
         }
 
-        [HarmonyPostfix, HarmonyPatch(typeof(HPart), ".ctor")]
+        [HarmonyPostfix, HarmonyPatch(typeof(HPart), MethodType.Constructor)]
         public static void HPart_ctor_ChangeCoordCount1(HPart __instance)
         {
             __instance.coordinateInfos = new HPart.CoordinateInfo[EC_ExtraCharacters.charaCount];
@@ -50,7 +50,7 @@ namespace EC_ExtraCharacters
                 __instance.coordinateInfos[i] = new HPart.CoordinateInfo();
         }
 
-        [HarmonyPostfix, HarmonyPatch(typeof(HPart), ".ctor", new [] { typeof(HPart) })]
+        [HarmonyPostfix, HarmonyPatch(typeof(HPart), MethodType.Constructor, new [] { typeof(HPart) })]
         public static void HPart_ctor_ChangeCoordCount2(HPart __instance, HPart _part)
         {
             __instance.coordinateInfos = new HPart.CoordinateInfo[EC_ExtraCharacters.charaCount];
@@ -398,7 +398,7 @@ namespace EC_ExtraCharacters
         [HarmonyTranspiler, HarmonyPatch(typeof(ParticleCollision), "Start")]
         public static IEnumerable<CodeInstruction> ParticleCollision_Start_ChangeSiruCount(IEnumerable<CodeInstruction> instructions) => ChangeCharaCount(instructions, 8, new CodeInstruction(OpCodes.Ldc_I4_S, EC_ExtraCharacters.charaCount), false, "ParticleCollision_Start_ChangeSiruCount");
 
-        [HarmonyTranspiler, HarmonyPatch(typeof(HPart), ".ctor", typeof(HPart))]
+        [HarmonyTranspiler, HarmonyPatch(typeof(HPart), MethodType.Constructor, typeof(HPart))]
         public static IEnumerable<CodeInstruction> HPart_ctor_ChangeCoordCount(IEnumerable<CodeInstruction> instructions) => ChangeCharaCount(instructions, 8, new CodeInstruction(OpCodes.Ldc_I4_S, EC_ExtraCharacters.charaCount), false, "HPart_ctor_ChangeCoordCount");
 
         [HarmonyTranspiler, HarmonyPatch(typeof(PartSettingCanvas), "AddGroup", new Type[] {})]
